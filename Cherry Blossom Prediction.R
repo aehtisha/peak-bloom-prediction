@@ -1,4 +1,4 @@
-### STAT 490 Cherry Blossom Assignment
+###Cherry Blossom Prediction
 # Areeb Ehtisham
 
 #--Setup--
@@ -20,7 +20,7 @@ stations <- ghcnd_stations()
 
 get_temperature <- function (stationid) {
   ghcnd_search(stationid = stationid, var = c("tmax"), 
-               date_min = "1950-01-01", date_max = "2022-01-31")[[1]] %>%
+               date_min = "1950-01-01", date_max = "2023-01-31")[[1]] %>%
     mutate(year = as.integer(format(date, "%Y")),
            month = as.integer(strftime(date, '%m')) %% 12,
            season = cut(month, breaks = c(0, 2, 5, 8, 11),
@@ -54,7 +54,7 @@ temperature_predictions <-
 
 get_prcp <- function(stationid) {
   ghcnd_search(stationid = stationid, var = c("prcp"), 
-               date_min = "1950-01-01", date_max = "2022-01-31")[[1]] %>%
+               date_min = "1950-01-01", date_max = "2023-01-31")[[1]] %>%
     mutate(year = as.integer(format(date, "%Y")),
            month = as.integer(strftime(date, '%m')) %% 12,
            season = cut(month, breaks = c(0, 2, 5, 8, 11),
@@ -105,10 +105,9 @@ predictions
 submission_predictions <- predictions %>% 
   filter(year > 2022) %>%
   mutate(predicted_doy = round(predicted_doy)) %>%
-  select(predicted_doy, year, location)
+  select(year, location, predicted_doy)
 
 submission_predictions
-View(submission_predictions)
 
 write.csv(submission_predictions, file = "cherry-predictions.csv",
           row.names = F)
